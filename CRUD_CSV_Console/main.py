@@ -1,16 +1,15 @@
 '''
-Assignment 02
+Assignment 03
 Author Dikshit Dikshit
 '''
 from Presentation import presentation
 
 """ 
-begins the application by calling presentation's init method 
+begins the application by calling presentation's userChoice() method 
 """
 def main():
 
-    obj = presentation("InternationalCovid19Cases.csv")
-    obj.userChoice()
-
+        obj = presentation()
+        obj.userChoice()
 
 main()

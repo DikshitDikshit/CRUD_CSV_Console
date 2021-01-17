@@ -1,5 +1,5 @@
 '''
-Assignment 02
+Assignment 04
 Author Dikshit Dikshit
 '''
 
@@ -13,21 +13,23 @@ def clear():
         _ = system('clear')
 
 
-from Application import ApplicationLayer
-
+from assign4 import Assign4
 
 class presentation:
 
-    def __init__(self, fname):
-        self.app = ApplicationLayer(fname)
+    def __init__(self):
+        self.assign = Assign4()
 
     """ this function displays menu options """
 
     def dispMenu(self):
-        print("Developed by Dikshit Dikshit")
+        print("\nDeveloped by Dikshit Dikshit")
         print("1- to display records\n2- to enter a new record\n3- to edit an existing record")
         print(
-            "4- to delete an existing record\n5- to save current records to a new file\n6- Reload the orignal Dataset\n7-exit\n\n")
+            "4- to delete an existing record\n5- to save current records to a new file\n6- Reload the original "
+            "Dataset\n"
+            "7- Search on the basis of ID an Date\n8- Search on the basis of ID and Cases\n9- Search on the basis of "
+            "ID and Deaths\n10- Exit\n\n")
 
     """ User input function """
 
@@ -35,14 +37,14 @@ class presentation:
 
         self.dispMenu()
 
-        choice = input("Select option from the menu below: ")
+        choice = input("Select option from the menu above: ")
 
         # runs the loop until the choice is 7 (exit)
-        while choice != "7":
+        while choice != "10":
 
             # display records
             if choice == "1":
-                self.app.display()
+                self.assign.readAll()
                 sleep(7)
             elif choice == "2":
                 # prompt user for input for the new records
@@ -50,14 +52,12 @@ class presentation:
                 DATE = input("Enter DATE: ")
                 CASES = input("Enter CASES: ")
                 DEATHS = input("Enter DEATHS: ")
-                NAME_FR = input("Enter NAME in french: ")
-                NAME_EN = input("Enter NAME in english: ")
-
-                if self.app.addRec(
-                        [ID, DATE, CASES, DEATHS, NAME_FR, NAME_EN]) == -1:
-                    print("The record you entered already exists, Try with new values")
-                else:
-                    print("Your record is successfully added\n")
+                NAME_FR = input("Enter NAME in French: ")
+                NAME_EN = input("Enter NAME in English: ")
+                # making a cases class's instance to pass it into insert method of assign3 class.
+                case = Cases(ID, DATE, CASES, DEATHS, NAME_FR, NAME_EN)
+                self.assign.insert(case)
+                print("Your record is successfully added\n")
                 sleep(5)
 
             elif choice == "3":
@@ -69,39 +69,48 @@ class presentation:
                 DEATHS = input("Enter DEATHS: ")
                 NAME_FR = input("Enter NAME in french: ")
                 NAME_EN = input("Enter NAME in english: ")
+                # making a cases class's instance to pass it into update method of assign3 class.
+                case = Cases(ID, DATE, CASES, DEATHS, NAME_FR, NAME_EN)
+                self.assign.update(case)
+                print("Your record is successfully updated!")
 
-                if self.app.update(
-                        [ID, DATE, CASES, DEATHS, NAME_FR, NAME_EN]) == -1:
-                    print("The Data you entered doesn't exists in our records!")
-                else:
-                    print("Your record is successfully updated!")
-                sleep(5)
-                # prompt user for id and date(using both as key) to delete the record
+                # prompt user for id and date(using both as key) and passing it to delete method of assign3 class
+                # to delete the record
             elif choice == "4":
 
                 ID = input("Enter ID: ")
                 DATE = input("Enter DATE: ")
 
-                if self.app.deleteRec([ID, DATE]) == -1:
-                    print("Information you entered doesn't exist in our records!")
-                else:
-                    print("The record is successfully deleted!")
+                self.assign.delete(ID,DATE)
+                print("The record is successfully deleted!")
                 sleep(5)
-
+            # write the updated data into a new file
             elif choice == "5":
-                # write the updated data into a new file
-                self.app.writeFile()
-                print("Data loaded to new file!")
-                sleep(2)
+                self.assign.writeToFile()
+                print("The records are successfully saved to a new file!")
+                sleep(5)
+            # reload the original data into the memory
             elif choice == "6":
-                # reload the original data into the memory
-                self.app.storeData()
-                print("Data is reloaded from the previous file")
-                sleep(2)
+                self.assign.backup()
+
+                sleep(5)
+            # Search on the basis of multiple columns at the same time, Option 1: on the basis of ID and Date.
+            elif choice == "7":
+                ID = input("Enter ID: ")
+                Date = input("Enter DATE: ")
+                self.assign.dateAndId(ID, Date)
+            # Search on the basis of multiple columns at the same time, Option 2: on the basis of ID and Cases.
+            elif choice == "8":
+                ID = input("Enter ID: ")
+                Cases = input("Enter Cases: ")
+                self.assign.idAndCases(ID, Cases)
+            # Search on the basis of multiple columns at the same time, Option 3: on the basis of ID and Deaths.
+            elif choice == "9":
+                ID = input("Enter ID: ")
+                Deaths = input("Enter Deaths: ")
+                self.assign.idAndDeaths(ID, Deaths)
             else:
                 # exit
-                print("\nProcess finished with exit code 0")
-
                 return
 
             clear()
